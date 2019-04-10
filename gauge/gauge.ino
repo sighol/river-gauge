@@ -1,10 +1,8 @@
 void setup() {
-    ultrasonic_setup();
-  // put your setup code here, to run once:
-
+  sim_setup();
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-    ultrasonic_loop();
+  ultrasonic_loop();
 }

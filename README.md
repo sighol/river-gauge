@@ -25,7 +25,7 @@ Driver til brettet vårt:  https://sparks.gogo.co.nz/ch340.html
 
 Sim 800L:
 Pin 11=RX
-Pin3=TX
+Pin  3=TX
 Manual: https://www.faranux.com/wp-content/uploads/2016/12/SIM800-Series_AT-Command-Manual_V1.09.pdf
 
 Ultrasound sensor:

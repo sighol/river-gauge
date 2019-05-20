@@ -1,6 +1,6 @@
-#include <sim800.h>
 #include <SoftwareSerial.h>
-#include <ultrasound.h>
+#include "sim800.h"
+#include "ultrasound.h"
 
 SoftwareSerial simSerial(11, 3); // RX, TX
 
@@ -24,27 +24,41 @@ void connectSoftwareSerial()
 }
 
 Sim800 sim(&simSerial);
-Ultra ultra (9, 10);
+// Ultra ultra (9, 10);
 
 void setup() {
     connectHardwareSerial();
     connectSoftwareSerial();
 
-    ultra.start();
+    // ultra.start();
+    Serial.println(F("Done with setup"));
 }
 
+double distance = 0.0;
+
 void loop() {
+    Serial.println(F("Started loop"));
+
     delay(1000);
-    double distance = ultra.readDistance();
-    Serial.print("Distance is: ");
-    Serial.print(distance);
-    Serial.println(" cm");
+    // double distance = ultra.readDistance();
+    // Serial.print("Distance is: ");
+    // Serial.print(distance);
+    // Serial.println(" cm");
+
+    distance++;
+
+    Serial.print(F("The distance is: "));
+    Serial.println(distance);
 
     char url[100];
+    memset(url, 0, 100);
     strcat(url, "http://hvorerdetvann.com/post_saggrenda_data/");
     char distance_str[10];
-    dtostrf(distance, 6, 2, distance_str);
+    memset(distance_str, 'a', 10);
+    dtostrf(distance, 2, 2, distance_str);
     strcat(url, distance_str);
+
+    Serial.print(F("URL is: "));
+    Serial.println(url);
     sim.sendHttpGet(url);
-  // put your main code here, to run repeatedly:
 }

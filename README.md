@@ -22,6 +22,7 @@ Arduino dokumentason for Nano: https://store.arduino.cc/arduino-nano
 Nano klonen vi har: https://www.ebay.com/itm/MINI-USB-Nano-V3-0-ATmega328P-CH340G-5V-16M-Micro-controller-board-for-Arduino/381374550571?ssPageName=STRK%3AMEBIDX%3AIT&_trksid=p2060353.m2749.l2649
 
 Driver til brettet vårt:  https://sparks.gogo.co.nz/ch340.html
+NB: Driver trengs ikke på linux.
 
 Sim 800L:
 Pin 11=RX

@@ -1,7 +1,6 @@
 #include <SoftwareSerial.h>
 
-///// sim800.h
-
+// sim800.h -------------------------------------------------------------------
 class Sim800 {
 public:
     enum Status {
@@ -50,12 +49,13 @@ private:
     Status initHttp();
     Status closeHttp();
 
+    // Reads everything on the serial buffer. Useful for emptying the buffer.
     String readRaw();
 
     void printDebug(String *output);
 
-    /// Waits for a response and returns with a status code. The timeout is in
-    /// milliseconds.
+    // Waits for a response and returns with a status code. The timeout is in
+    // milliseconds.
     Status checkResponse(uint16_t timeout);
 
 public:
@@ -66,7 +66,7 @@ public:
     Status sendHttpGet(char* url);
 };
 
-//// sim800.cpp
+// sim800.cpp -----------------------------------------------------------------
 
 String Sim800::readRaw() {
     uint16_t timeout=0;
@@ -132,8 +132,6 @@ Sim800::Status Sim800::_enableBearerProfile() {
     Status status = _disableBearerProfile();
 
     Serial.println("Enabling Bearer profile");
-    // This function enable and set the bearer profile for time, location and GPRS service
-    String buffer;
 
     // Set bearer parameter
     serial->print(F("AT+SAPBR=3,1,\"CONTYPE\",\"GPRS\"\r\n" ));
@@ -258,7 +256,7 @@ Sim800::Status Sim800::sendHttpGet(char* url) {
     return closeHttp();
 }
 
-// ultrasound.h -----------------------------------
+// ultrasound.h ---------------------------------------------------------------
 class Ultra {
 private:
   int trigPin;
@@ -311,7 +309,7 @@ double Ultra::readDistance() {
 }
 
 
-// gauge.ino -----------------------------------
+// gauge.ino ------------------------------------------------------------------
 SoftwareSerial simSerial(11, 3); // RX, TX
 Sim800 sim(&simSerial);
 Ultra ultra (9, 10);

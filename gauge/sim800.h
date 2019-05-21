@@ -60,8 +60,20 @@ public:
         this->serial = serial;
     }
 
+    Status checkConnection();
+
     Status sendHttpGet(char* url);
 };
+
+Sim800::Status Sim800::checkConnection() {
+    serial->print(F("AT\r\n"));
+    Status status = checkResponse(5000);
+    if (status != OK) {
+        Serial.println("Failed to connect to SIM800");
+    }
+
+    return status;
+}
 
 
 String Sim800::readRaw() {

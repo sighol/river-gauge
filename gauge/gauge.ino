@@ -57,5 +57,12 @@ void loop() {
 
     Serial.print(F("URL is: "));
     Serial.println(url);
+
+    if (sim.checkConnection() != Sim800::OK) {
+        return;
+    }
+
+    Serial.print(F("Connected to SIM. starting to send..."));
+
     sim.sendHttpGet(url);
 }

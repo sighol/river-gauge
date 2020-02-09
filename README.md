@@ -4,6 +4,12 @@ Work in progress arduino code for a automatic water flow gauge.
 
 Works with an Arduino nano.
 
+# Board design
+
+![board design](docs/design.png)
+
+*Image drawn in [draw.io](https://draw.io)*
+
 # Installation
 
 ## Arch linux

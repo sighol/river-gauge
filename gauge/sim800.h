@@ -1,3 +1,5 @@
+#include <SoftwareSerial.h>
+
 class Sim800 {
 public:
     enum Status {
@@ -19,7 +21,7 @@ private:
     SoftwareSerial* serial;
     bool DEBUG = true;
 
-    const char* _networkAPN = "internet.public";
+    const char* _networkAPN = "telenor.smart";
     const char* _userName = "dj";
     const char* _passWord = "dj";
 
@@ -39,9 +41,10 @@ private:
         ">",
         "OK"
     };
-
-    Status _enableBearerProfile();
-    Status _disableBearerProfile();
+    
+public:
+    Status enableBearerProfile();
+    Status disableBearerProfile();
 
     Status initHttp();
     Status closeHttp();
@@ -55,7 +58,7 @@ private:
     // milliseconds.
     Status checkResponse(uint16_t timeout);
 
-public:
+
     Sim800(SoftwareSerial* serial) {
         this->serial = serial;
     }
@@ -108,6 +111,14 @@ void Sim800::printDebug(String *output) {
 Sim800::Status Sim800::checkResponse(uint16_t timeout) {
     unsigned long t = millis();
 
+    delay(1000);
+
+    while (serial->available()) {
+      Serial.write(serial->read());
+    }
+
+    return OK;
+
     while (millis() < t + timeout)
     {
         if (serial->available()) //check if the device is sending a message
@@ -136,9 +147,8 @@ Sim800::Status Sim800::checkResponse(uint16_t timeout) {
 }
 
 
-Sim800::Status Sim800::_enableBearerProfile() {
-    Status status = _disableBearerProfile();
-
+Sim800::Status Sim800::enableBearerProfile() {
+    Status status;
     Serial.println("Enabling Bearer profile");
 
     // Set bearer parameter
@@ -159,25 +169,25 @@ Sim800::Status Sim800::_enableBearerProfile() {
         return status;
     }
 
-    // Set username
-    serial->print(F("AT+SAPBR=3,1,\"USER\",\""));
-    serial->print(_userName);
-    serial->print(F("\"\r\n"));
-    status = checkResponse(1000);
-    if (status != OK) {
-        Serial.println("Failed to set username");
-        return status;
-    }
-
-    // Set password
-    serial->print(F("AT+SAPBR=3,1,\"PWD\",\""));
-    serial->print(_passWord);
-    serial->print(F("\"\r\n"));
-    status = checkResponse(1000);
-    if (status != OK) {
-        Serial.println("Failed to set password");
-        return status;
-    }
+//    // Set username
+//    serial->print(F("AT+SAPBR=3,1,\"USER\",\""));
+//    serial->print(_userName);
+//    serial->print(F("\"\r\n"));
+//    status = checkResponse(1000);
+//    if (status != OK) {
+//        Serial.println("Failed to set username");
+//        return status;
+//    }
+//
+//    // Set password
+//    serial->print(F("AT+SAPBR=3,1,\"PWD\",\""));
+//    serial->print(_passWord);
+//    serial->print(F("\"\r\n"));
+//    status = checkResponse(1000);
+//    if (status != OK) {
+//        Serial.println("Failed to set password");
+//        return status;
+//    }
 
     // activate bearer context
     serial->print(F("AT+SAPBR=1,1\r\n"));
@@ -200,7 +210,7 @@ Sim800::Status Sim800::_enableBearerProfile() {
     return OK;
 }
 
-Sim800::Status Sim800::_disableBearerProfile() {
+Sim800::Status Sim800::disableBearerProfile() {
     serial->print(F("AT+SAPBR=0,1\r\n"));
 
     Status status = checkResponse(20000);
@@ -213,7 +223,7 @@ Sim800::Status Sim800::_disableBearerProfile() {
 }
 
 Sim800::Status Sim800::initHttp() {
-    closeHttp();
+    // closeHttp();
     serial->print(F("AT+HTTPINIT\r"));
     return checkResponse(10000);
 }
@@ -224,19 +234,19 @@ Sim800::Status Sim800::closeHttp() {
 }
 
 Sim800::Status Sim800::sendHttpGet(char* url) {
-    Status status = _enableBearerProfile();
-    if (status != Status::OK) {
-        Serial.println(F("Failed to initialize IP"));
-        return status;
-    }
-
-    if ((status = initHttp()) != OK) {
-        Serial.println("Failed to initialize HTTP");
-        return status;
-    }
+//    Status status = _enableBearerProfile();
+//    if (status != Status::OK) {
+//        Serial.println(F("Failed to initialize IP"));
+//        return status;
+//    }
+//
+//    if ((status = initHttp()) != OK) {
+//        Serial.println("Failed to initialize HTTP");
+//        return status;
+//    }
 
     serial->print(F("AT+HTTPPARA=\"CID\",1\r\n"));
-    status = checkResponse(10000);
+    Status status = checkResponse(10000);
     if (status != OK) {
         Serial.println("Failed to set CID");
         return status;
@@ -261,5 +271,5 @@ Sim800::Status Sim800::sendHttpGet(char* url) {
     serial->print(F("AT+HTTPREAD\r\n"));
     String buffer = readRaw();
 
-    return closeHttp();
+    return OK;
 }

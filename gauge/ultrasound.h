@@ -45,6 +45,7 @@ double Ultra::readMicroseconds() {
   return pulseIn(this->echoPin, HIGH);
 }
 
+/// Gets the distance in centimeters
 double Ultra::readDistance() {
   return readMicroseconds() * 0.034 / 2;
 }

@@ -25,11 +25,11 @@
 const int LED = 13;
 const int RELAY = 7;
 
-const int SIM_RX = 11;
-const int SIM_TX = 3;
+const int SIM_RX = 10;
+const int SIM_TX = 11;
 
-const int ULTRA_TRIG = 9;
-const int ULTRA_ECHO = 10;
+const int ULTRA_TRIG = 90;
+const int ULTRA_ECHO = 100;
 
 SoftwareSerial simSerial(SIM_RX, SIM_TX); // RX, TX
 Sim800 sim(&simSerial);
@@ -68,6 +68,8 @@ void setup() {
   connectHardwareSerial();
   connectSoftwareSerial();
 
+  Serial.println("Hello Karsten and Sigurd. I am woke!");
+
   while (simSerial.available()) {
     Serial.write(simSerial.read());
   }
@@ -80,13 +82,7 @@ void setup() {
   }
 }
 
-void onWakeup() {
-  digitalWrite(RELAY, HIGH);
-
-  unsigned long t = millis();
-
-  delay(4000);
-
+double getDistance() {
   ultra.start();
 
   const int N = 10;
@@ -108,18 +104,39 @@ void onWakeup() {
   Serial.print(F("Got total distance: "));
   Serial.print(finalDistance);
   Serial.println(F(" cm"));
+  return finalDistance;
+}
 
+void onWakeup() {
+  Serial.println("Woke up");
+  digitalWrite(RELAY, HIGH);
+
+  unsigned long t = millis();
+
+  delay(4000);
+
+  Serial.println("Reading distance...");
+  //double distance = getDistance();
+  double distance = 13.37;
+  Serial.print("Distance is ");
+  Serial.print(distance);
+  Serial.println(" cm");
+
+  Serial.println("Waiting until SIM800 is believed to be ready...");
   while (millis() < t + 15000) {
     delay(100);
   }
 
+  Serial.println("Talking to SIM800...");
   initHttp();
-  
+
+  Serial.println("HTTP Ready. Sending...");
   digitalWrite(LED, HIGH);
-  send(finalDistance);
+  send(distance);
   digitalWrite(LED, LOW);
   
   digitalWrite(RELAY, LOW);
+  Serial.println("Done working. Going to sleep. ZZZzzzzz");
 }
 
 void initHttp() {
@@ -127,8 +144,7 @@ void initHttp() {
   sim.initHttp();
 }
 
-void insertionSort(double arr[], int n) 
-{ 
+void insertionSort(double arr[], int n) { 
   double key;
     int i, j; 
     for (i = 1; i < n; i++) { 
@@ -167,7 +183,7 @@ void turnOffPins() {
 void send(double distance) {
   char url[100];
   memset(url, 0, 100);
-  strcat(url, "http://webhook.site/480b8799-0b9f-4145-a356-01df766fd0cd?distance=");
+  strcat(url, "http://webhook.site/69aa92ee-768a-44c6-9bad-fe2d41862b68?distance=");
   char distance_str[10];
   memset(distance_str, 0, 10);
   dtostrf(distance, 2, 2, distance_str);

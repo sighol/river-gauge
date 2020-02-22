@@ -201,15 +201,11 @@ void send(double distance) {
 void loop() {
   onWakeup();
 
-  delay(1000); // Delay so that Serial.print is flushed
+  delay(1000); // Wait until Serial.print is flushed
 
-  myWatchdogEnable (0b100001);  // 8 seconds
-  myWatchdogEnable (0b100001);  // 8 seconds
-  myWatchdogEnable (0b100001);  // 8 seconds
-  myWatchdogEnable (0b100001);  // 8 seconds
-  myWatchdogEnable (0b100001);  // 8 seconds
-  myWatchdogEnable (0b100001);  // 8 seconds
-  myWatchdogEnable (0b100001);  // 8 seconds
+  for (int i = 0; i < 7; i++) {
+    myWatchdogEnable (0b100001);  // 8 seconds
+  }
 }
 
 void sim_loop() { // run over and over

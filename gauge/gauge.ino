@@ -42,11 +42,13 @@ void connectHardwareSerial() {
     unsigned long t = millis();
 
     // If HW serial is not connected, wait maximum 5 seconds
-    while (!Serial || t + 5000 > millis()) {
+    while (!Serial) {
         ; // wait for serial port to connect. Needed for native USB port only
     }
     
-    Serial.println("Hardware serial working");
+    Serial.print("Hardware serial working after ");
+    Serial.print(millis() - t);
+    Serial.println(" ms");
 }
 
 void connectSoftwareSerial() {
@@ -54,10 +56,13 @@ void connectSoftwareSerial() {
     
     unsigned long t = millis();
     
-    while (!simSerial || t + 5000 > millis()) {
+    while (!simSerial) {
         ;
     }
-    Serial.println("SIM800 serial working");
+    
+    Serial.print("SIM800 serial working after ");
+    Serial.print(millis() - t);
+    Serial.println(" ms");
 }
 
 // the setup function runs once when you press reset or power the board
@@ -100,11 +105,7 @@ double getDistance() {
   insertionSort(distances, N);
   printArray(distances, N);
 
-  double finalDistance = distances[N / 2];
-  Serial.print(F("Got total distance: "));
-  Serial.print(finalDistance);
-  Serial.println(F(" cm"));
-  return finalDistance;
+  return distances[N / 2];
 }
 
 void onWakeup() {
@@ -140,6 +141,7 @@ void onWakeup() {
 }
 
 void initHttp() {
+  sim.init();
   sim.enableBearerProfile();
   sim.initHttp();
 }
@@ -183,11 +185,14 @@ void turnOffPins() {
 void send(double distance) {
   char url[100];
   memset(url, 0, 100);
-  strcat(url, "http://webhook.site/69aa92ee-768a-44c6-9bad-fe2d41862b68?distance=");
+  strcat(url, "http://webhook.site/c3d3aa4f-d010-4f4e-ae5b-645a51e4a013");
+  strcat(url, "?distance=");
   char distance_str[10];
   memset(distance_str, 0, 10);
   dtostrf(distance, 2, 2, distance_str);
   strcat(url, distance_str);
+  Serial.print("Sending get request to: ");
+  Serial.println(url);
   
   sim.sendHttpGet(url);
 }
@@ -195,6 +200,8 @@ void send(double distance) {
 // the loop function runs over and over again forever
 void loop() {
   onWakeup();
+
+  delay(1000); // Delay so that Serial.print is flushed
 
   myWatchdogEnable (0b100001);  // 8 seconds
   myWatchdogEnable (0b100001);  // 8 seconds

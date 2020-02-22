@@ -43,6 +43,8 @@ private:
     };
     
 public:
+
+    Status init();
     Status enableBearerProfile();
     Status disableBearerProfile();
 
@@ -71,6 +73,25 @@ public:
 Sim800::Status Sim800::checkConnection() {
     serial->print(F("AT\r\n"));
     Status status = checkResponse(5000);
+    if (status != OK) {
+        Serial.println("Failed to connect to SIM800");
+    }
+
+    return status;
+}
+
+Sim800::Status Sim800::init() {
+    // Turn on debug mode
+    serial->print(F("at+cmee=2\r\n"));
+    Status status = checkResponse(5000);
+    if (status != OK) {
+        Serial.println("Failed to connect to SIM800");
+    }
+
+    // For some reason, the SIM may deactivate different functions. So CFUN=1 will
+    // enable all functionality.
+    serial->print(F("AT+CFUN=1\r\n"));
+    status = checkResponse(5000);
     if (status != OK) {
         Serial.println("Failed to connect to SIM800");
     }

@@ -9,25 +9,14 @@ SoftwareSerial in(RX, TX);
 
 void setup() {
   Serial.begin(9600);
-  while (!Serial) {
-  }
-
-  Serial.println("Hardware serial running");
-
   in.begin(9600);
-  while (!in) {
-  }
-  Serial.println("Software serial running");
-  // put your setup code here, to run once:
-
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
   sim_loop();
 }
 
-bool next_newline = true;
+bool char_is_newline = true;
 
 void set_time(char* b) {
   unsigned long t = millis();
@@ -44,14 +33,14 @@ void sim_loop() {
   if (in.available()) {
     char c = in.read();
     if (c == '\n') {
-      next_newline = true;
-    } else if (next_newline) {
+      char_is_newline = true;
+    } else if (char_is_newline) {
       char timestr[20];
       set_time(timestr);
       Serial.print("[");
       Serial.print(timestr);
       Serial.print("]: ");
-      next_newline = false;
+      char_is_newline = false;
     }
     Serial.write(c);
   }

@@ -31,47 +31,18 @@ const int SIM_TX = 11;
 const int ULTRA_TRIG = 90;
 const int ULTRA_ECHO = 100;
 
-SoftwareSerial simSerial(SIM_RX, SIM_TX); // RX, TX
+SoftwareSerial simSerial(SIM_RX, SIM_TX);
 Sim800 sim(&simSerial);
 Ultra ultra (ULTRA_TRIG, ULTRA_ECHO);
 
-void connectHardwareSerial() {
-    // Open serial communications and wait for port to open:
-    Serial.begin(9600);
 
-    unsigned long t = millis();
 
-    // If HW serial is not connected, wait maximum 5 seconds
-    while (!Serial) {
-        ; // wait for serial port to connect. Needed for native USB port only
-    }
-
-    Serial.print("Hardware serial working after ");
-    Serial.print(millis() - t);
-    Serial.println(" ms");
-}
-
-void connectSoftwareSerial() {
-    simSerial.begin(9600);
-
-    unsigned long t = millis();
-
-    while (!simSerial) {
-        ;
-    }
-
-    Serial.print("SIM800 serial working after ");
-    Serial.print(millis() - t);
-    Serial.println(" ms");
-}
-
-// the setup function runs once when you press reset or power the board
 void setup() {
   pinMode(LED, OUTPUT);
   pinMode(RELAY, OUTPUT);
 
-  connectHardwareSerial();
-  connectSoftwareSerial();
+  Serial.begin(9600);
+  simSerial.begin(9600);
 
   Serial.println("Hello Karsten and Sigurd. I am woke!");
 

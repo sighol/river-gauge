@@ -41,7 +41,7 @@ private:
         ">",
         "OK"
     };
-    
+
 public:
 
     Status init();

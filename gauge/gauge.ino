@@ -14,14 +14,14 @@
 // at+cmee=2       Enter debug mode: It'll show more error info
 // AT&F            Factory reset
 // AT+CFUN=1       Enable all phone functionalities
-// AT+COPS?        
+// AT+COPS?
 
 // Husk å sette CFUN til 1, som er full funksjonalitet.
 
 // Pass på å ha nok strøm inn mot sim800l. Vi fikk det til å fungere med 5.4 V.
 // Når sim800L binker annethvert sekund, har den koblet seg opp.
 // Når den er oppe, og fungerer, kan man ringe til SIM-kortet. Den vil da si "RING" for hvert ring i konsollen.
- 
+
 const int LED = 13;
 const int RELAY = 7;
 
@@ -45,7 +45,7 @@ void connectHardwareSerial() {
     while (!Serial) {
         ; // wait for serial port to connect. Needed for native USB port only
     }
-    
+
     Serial.print("Hardware serial working after ");
     Serial.print(millis() - t);
     Serial.println(" ms");
@@ -53,13 +53,13 @@ void connectHardwareSerial() {
 
 void connectSoftwareSerial() {
     simSerial.begin(9600);
-    
+
     unsigned long t = millis();
-    
+
     while (!simSerial) {
         ;
     }
-    
+
     Serial.print("SIM800 serial working after ");
     Serial.print(millis() - t);
     Serial.println(" ms");
@@ -92,7 +92,7 @@ double getDistance() {
 
   const int N = 10;
   double distances[N];
-  
+
   for (int i = 0; i < N; i++) {
     distances[i] = ultra.readDistance();
     Serial.print(F("Got distance: "));
@@ -135,7 +135,7 @@ void onWakeup() {
   digitalWrite(LED, HIGH);
   send(distance);
   digitalWrite(LED, LOW);
-  
+
   digitalWrite(RELAY, LOW);
   Serial.println("Done working. Going to sleep. ZZZzzzzz");
 }
@@ -146,33 +146,33 @@ void initHttp() {
   sim.initHttp();
 }
 
-void insertionSort(double arr[], int n) { 
+void insertionSort(double arr[], int n) {
   double key;
-    int i, j; 
-    for (i = 1; i < n; i++) { 
-        key = arr[i]; 
-        j = i - 1; 
-  
-        /* Move elements of arr[0..i-1], that are 
-          greater than key, to one position ahead 
+    int i, j;
+    for (i = 1; i < n; i++) {
+        key = arr[i];
+        j = i - 1;
+
+        /* Move elements of arr[0..i-1], that are
+          greater than key, to one position ahead
           of their current position */
-        while (j >= 0 && arr[j] > key) { 
-            arr[j + 1] = arr[j]; 
-            j = j - 1; 
-        } 
-        arr[j + 1] = key; 
-    } 
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+    }
 }
 
-void printArray(double arr[], int n) 
-{ 
-    int i; 
+void printArray(double arr[], int n)
+{
+    int i;
     for (i = 0; i < n; i++) {
       Serial.print(arr[i]);
       Serial.print(", ");
     }
-    Serial.println(""); 
-} 
+    Serial.println("");
+}
 
 void turnOffPins() {
   //To reduce power, setup all pins as inputs with no pullups
@@ -193,7 +193,7 @@ void send(double distance) {
   strcat(url, distance_str);
   Serial.print("Sending get request to: ");
   Serial.println(url);
-  
+
   sim.sendHttpGet(url);
 }
 

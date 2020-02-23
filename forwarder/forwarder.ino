@@ -13,7 +13,7 @@ void setup() {
   }
 
   Serial.println("Hardware serial running");
-  
+
   in.begin(9600);
   while (!in) {
   }

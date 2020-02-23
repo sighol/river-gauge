@@ -13,13 +13,13 @@ void myWatchdogEnable(const byte interval) {  // turn on watchdog timer; interru
   WDTCSR =  0b01000000 | interval;    // set WDIE, and appropriate delay
 
   wdt_reset();
-  
+
   byte adcsra_save = ADCSRA;
   byte prr_save = PRR;
 
   // disable ADC
-  ADCSRA = 0;  
-  
+  ADCSRA = 0;
+
   // power reduction register
   // Bit 7 - PRTWI: Power Reduction TWI
   // Bit 6 - PRTIM2: Power Reduction Timer/Counter2
@@ -29,13 +29,13 @@ void myWatchdogEnable(const byte interval) {  // turn on watchdog timer; interru
   // Bit 2 - PRSPI: Power Reduction Serial Peripheral Interface
   // Bit 1 - PRUSART0: Power Reduction USART0
   // Bit 0 - PRADC: Power Reduction ADC
-  
+
   // turn off various modules
   PRR = 0b11101111;
-    
+
   set_sleep_mode(SLEEP_MODE_PWR_DOWN);   // sleep mode is set here
   sleep_mode();            // now goes to Sleep and waits for the interrupt
-  
+
   // stop power reduction
   ADCSRA = adcsra_save;
   PRR = prr_save;

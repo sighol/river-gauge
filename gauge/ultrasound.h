@@ -1,17 +1,17 @@
 class Ultra {
-private:
-  int trigPin;
-  int echoPin;
+  private:
+    int trigPin;
+    int echoPin;
 
-public:
-  Ultra(int trigPin, int echoPin);
+  public:
+    Ultra(int trigPin, int echoPin);
 
-  void start();
-  void stop();
+    void start();
+    void stop();
 
-  double readMicroseconds();
+    double readMicroseconds();
 
-  double readDistance();
+    double readDistance();
 };
 
 Ultra::Ultra(int trigPin, int echoPin) {

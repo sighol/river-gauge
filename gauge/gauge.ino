@@ -119,35 +119,35 @@ void initHttp() {
 
 void insertionSort(double arr[], int n) {
   double key;
-    int i, j;
-    for (i = 1; i < n; i++) {
-        key = arr[i];
-        j = i - 1;
+  int i, j;
+  for (i = 1; i < n; i++) {
+    key = arr[i];
+    j = i - 1;
 
-        /* Move elements of arr[0..i-1], that are
-          greater than key, to one position ahead
-          of their current position */
-        while (j >= 0 && arr[j] > key) {
-            arr[j + 1] = arr[j];
-            j = j - 1;
-        }
-        arr[j + 1] = key;
+    /* Move elements of arr[0..i-1], that are
+      greater than key, to one position ahead
+      of their current position */
+    while (j >= 0 && arr[j] > key) {
+      arr[j + 1] = arr[j];
+      j = j - 1;
     }
+    arr[j + 1] = key;
+  }
 }
 
 void printArray(double arr[], int n)
 {
-    int i;
-    for (i = 0; i < n; i++) {
-      Serial.print(arr[i]);
-      Serial.print(", ");
-    }
-    Serial.println("");
+  int i;
+  for (i = 0; i < n; i++) {
+    Serial.print(arr[i]);
+    Serial.print(", ");
+  }
+  Serial.println("");
 }
 
 void turnOffPins() {
   //To reduce power, setup all pins as inputs with no pullups
-  for(int x = 1 ; x < 18 ; x++){
+  for (int x = 1 ; x < 18 ; x++) {
     pinMode(x, INPUT);
     digitalWrite(x, HIGH); //changed from low to high which was 400ua change
   }

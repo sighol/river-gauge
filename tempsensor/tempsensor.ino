@@ -15,7 +15,9 @@ AM2320 th;
 
 void setup() {
   Serial.begin(9600);
-  while (!Serial) {;}
+  while (!Serial) {
+    ;
+  }
 
   Serial.println("Hello");
 }
@@ -30,7 +32,5 @@ void loop() {
   sprintf(msg, "Temp is %s and Humidity is %s", tempstr, humstr);
   Serial.println(msg);
 
-delay(100);
+  delay(100);
 }
-
-
